@@ -2,7 +2,6 @@ package com.ramadan.readybackendproject.data.repository
 
 import com.ramadan.readybackendproject.data.api.CatApiService
 import com.ramadan.readybackendproject.data.mapper.CatImageDtoMapper
-import com.ramadan.readybackendproject.domain.model.ApiError
 import com.ramadan.readybackendproject.domain.model.BaseResult
 import com.ramadan.readybackendproject.domain.model.CatImage
 import com.ramadan.readybackendproject.domain.repository.CatRepository
@@ -27,7 +26,7 @@ class CatRepositoryImpl @Inject constructor(
                 val catImagesDto = response.body()
 
                 if (catImagesDto.isNullOrEmpty()) {
-                    emit(BaseResult.Error(ApiError.NotFound("No cat images found")))
+                    emit(BaseResult.Error(message = "No cat images found", code = 203))
                 } else {
                     val domainModels = mapper.mapToDomainList(catImagesDto)
                     emit(BaseResult.Success(domainModels))
@@ -35,26 +34,24 @@ class CatRepositoryImpl @Inject constructor(
             } else {
                 emit(
                     BaseResult.Error(
-                        ApiError.ServerError(
-                            message = response.message() ?: "API error occurred",
-                            code = response.code()
-                        )
+                        message = response.message() ?: "API error occurred",
+                        code = response.code()
                     )
                 )
             }
         } catch (e: HttpException) {
             emit(
                 BaseResult.Error(
-                    ApiError.ServerError(
-                        message = e.message(),
-                        code = e.code()
-                    )
+                    message = e.message(),
+                    code = e.code()
+
                 )
             )
         } catch (e: IOException) {
-            emit(BaseResult.Error(ApiError.Network(e.message ?: "Network error occurred")))
+            emit(BaseResult.Error(message = e.message ?: "Network error occurred", code = 203))
+
         } catch (e: Exception) {
-            emit(BaseResult.Error(ApiError.Unknown(e.message ?: "Unknown error occurred")))
+            emit(BaseResult.Error(message = e.message ?: "Unknown error occurred", code = 203))
         }
     }
 
@@ -68,34 +65,33 @@ class CatRepositoryImpl @Inject constructor(
                 val catImagesDto = response.body()
 
                 if (catImagesDto.isNullOrEmpty()) {
-                    emit(BaseResult.Error(ApiError.NotFound("No cat images found")))
+                    emit(BaseResult.Error(message = "No cat images found", code = 203))
+
                 } else {
                     val domainModels = mapper.mapToDomainList(catImagesDto)
                     emit(BaseResult.Success(domainModels))
                 }
             } else {
                 emit(
-                    BaseResult.Error(
-                        ApiError.ServerError(
-                            message = response.message() ?: "API error occurred",
-                            code = response.code()
-                        )
-                    )
+                    BaseResult.Error(message = "API error occurred", code = 203)
                 )
             }
         } catch (e: HttpException) {
             emit(
                 BaseResult.Error(
-                    ApiError.ServerError(
-                        message = e.message(),
-                        code = e.code()
-                    )
+                    message = e.message(),
+                    code = e.code()
                 )
             )
+
         } catch (e: IOException) {
-            emit(BaseResult.Error(ApiError.Network(e.message ?: "Network error occurred")))
+            emit(
+                BaseResult.Error(message = "Network error occurred", code = 203)
+            )
         } catch (e: Exception) {
-            emit(BaseResult.Error(ApiError.Unknown(e.message ?: "Unknown error occurred")))
+            emit(
+                BaseResult.Error(message = "Unknown error occurred", code = 203)
+            )
         }
     }
 }

@@ -2,14 +2,12 @@ package com.ramadan.readybackendproject.presentation.screens.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ramadan.readybackendproject.domain.model.ApiError
 import com.ramadan.readybackendproject.domain.model.BaseResult
 import com.ramadan.readybackendproject.domain.usecase.GetCatImagesUseCase
 import com.ramadan.readybackendproject.domain.usecase.RefreshCatImagesUseCase
 import com.ramadan.readybackendproject.presentation.mapper.CatImageDomainMapper
 import com.ramadan.readybackendproject.presentation.screens.uimodel.CatListIntent
 import com.ramadan.readybackendproject.presentation.screens.uimodel.CatListState
-import com.ramadan.readybackendproject.presentation.screens.uimodel.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +40,12 @@ class CatListViewModel @Inject constructor(
     private fun loadCatImages() {
         viewModelScope.launch {
             // Show loading state
-            _state.update { it.copy(isLoading = true, error = null) }
+            _state.update {
+                it.copy(
+                    isLoading = true, errorMessage = null,
+                    errorCode = null
+                )
+            }
 
             getCatImagesUseCase().collect { result ->
                 when (result) {
@@ -53,25 +56,29 @@ class CatListViewModel @Inject constructor(
                                 isLoading = false,
                                 isRefreshing = false,
                                 catImages = uiModels,
-                                error = null
+                                errorMessage = null,
+                                errorCode = null
                             )
                         }
                     }
 
                     is BaseResult.Error -> {
-                        val errorState = mapApiErrorToErrorState(result.error)
                         _state.update {
                             it.copy(
                                 isLoading = false,
                                 isRefreshing = false,
-                                error = errorState
+                                errorMessage = null,
+                                errorCode = null
                             )
                         }
                     }
 
                     is BaseResult.Loading -> {
                         _state.update {
-                            it.copy(isLoading = true, error = null)
+                            it.copy(
+                                isLoading = true, errorMessage = null,
+                                errorCode = null
+                            )
                         }
                     }
                 }
@@ -82,7 +89,12 @@ class CatListViewModel @Inject constructor(
     private fun refreshCatImages() {
         viewModelScope.launch {
             // Show refreshing state
-            _state.update { it.copy(isRefreshing = true, error = null) }
+            _state.update {
+                it.copy(
+                    isRefreshing = true, errorMessage = null,
+                    errorCode = null
+                )
+            }
 
             refreshCatImagesUseCase().collect { result ->
                 when (result) {
@@ -91,31 +103,36 @@ class CatListViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             // Combine existing images with new ones
-                           // val combinedImages = currentState.catImages + newImages
+                            // val combinedImages = currentState.catImages + newImages
 
                             currentState.copy(
                                 isLoading = false,
                                 isRefreshing = false,
                                 catImages = newImages,
-                                error = null
+                                errorMessage = null,
+                                errorCode = null
                             )
                         }
                     }
 
                     is BaseResult.Error -> {
-                        val errorState = mapApiErrorToErrorState(result.error)
                         _state.update {
                             it.copy(
                                 isLoading = false,
                                 isRefreshing = false,
-                                error = errorState
+                                errorMessage = it.errorMessage,
+                                errorCode = it.errorCode
                             )
                         }
                     }
 
                     is BaseResult.Loading -> {
                         _state.update {
-                            it.copy(isRefreshing = true, error = null)
+                            it.copy(
+                                isRefreshing = true,
+                                errorMessage = null,
+                                errorCode = null
+                            )
                         }
                     }
                 }
@@ -123,18 +140,4 @@ class CatListViewModel @Inject constructor(
         }
     }
 
-    private fun mapApiErrorToErrorState(apiError: ApiError): ErrorState {
-        return when (apiError) {
-            is ApiError.Network -> ErrorState.NetworkError
-            is ApiError.NotFound -> ErrorState.NotFound
-            is ApiError.AccessDenied -> ErrorState.AccessDenied
-            is ApiError.ServiceUnavailable -> ErrorState.ServiceUnavailable
-            is ApiError.ServerError -> ErrorState.ApiError(
-                message = apiError.message,
-                code = apiError.code
-            )
-
-            is ApiError.Unknown -> ErrorState.UnknownError(apiError.message)
-        }
-    }
 }

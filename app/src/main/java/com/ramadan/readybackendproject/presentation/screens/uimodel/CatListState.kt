@@ -6,5 +6,6 @@ data class CatListState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val catImages: List<CatImageUI> = emptyList(),
-    val error: ErrorState? = null
+    val errorMessage: String?=null,
+    val errorCode: Int?=null
 )

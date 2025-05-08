@@ -19,11 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ramadan.readybackendproject.R
-import com.ramadan.readybackendproject.presentation.screens.uimodel.ErrorState
 
 @Composable
 fun ErrorView(
-    errorState: ErrorState,
+    errorMessage: String? = null,
+    errorCode: Int? = null,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -34,18 +34,9 @@ fun ErrorView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        val iconRes = when (errorState) {
-            is ErrorState.NetworkError -> R.drawable.ic_launcher_background
-            is ErrorState.NotFound -> R.drawable.ic_launcher_background
-            is ErrorState.AccessDenied -> R.drawable.ic_launcher_background
-            is ErrorState.ServiceUnavailable -> R.drawable.ic_launcher_background
-            is ErrorState.EmptyResponse -> R.drawable.ic_launcher_background
-            is ErrorState.ApiError -> R.drawable.ic_launcher_background
-            is ErrorState.UnknownError -> R.drawable.ic_launcher_background
-        }
 
         Image(
-            painter = painterResource(id = iconRes),
+            painter = painterResource(id = R.drawable.ic_launcher_background),
             contentDescription = null,
             modifier = Modifier.size(120.dp)
         )
@@ -53,7 +44,7 @@ fun ErrorView(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = getErrorTitle(errorState),
+            text = errorMessage ?: "",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.error
         )
@@ -61,7 +52,7 @@ fun ErrorView(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = getErrorMessage(errorState),
+            text = errorMessage ?: "",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
@@ -69,64 +60,15 @@ fun ErrorView(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        if (shouldShowRetry(errorState)) {
-            Button(
-                onClick = onRetry,
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(48.dp)
-            ) {
-                Text("Try Again")
-            }
+        Button(
+            onClick = onRetry,
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(48.dp)
+        ) {
+            Text("Try Again")
         }
+
     }
 }
 
-
-private fun getErrorTitle(errorState: ErrorState): String {
-    return when (errorState) {
-        is ErrorState.NetworkError -> "No Internet Connection"
-        is ErrorState.NotFound -> "Not Found"
-        is ErrorState.AccessDenied -> "Access Denied"
-        is ErrorState.ServiceUnavailable -> "Service Unavailable"
-        is ErrorState.EmptyResponse -> "No Images Found"
-        is ErrorState.ApiError -> "Server Error"
-        is ErrorState.UnknownError -> "Something Went Wrong"
-    }
-}
-
-private fun getErrorMessage(errorState: ErrorState): String {
-    return when (errorState) {
-        is ErrorState.NetworkError ->
-            "Please check your network connection and try again."
-
-        is ErrorState.NotFound ->
-            "We couldn't find what you were looking for. It might have been moved or deleted."
-
-        is ErrorState.AccessDenied ->
-            "You don't have permission to access this resource. Please check your credentials."
-
-        is ErrorState.ServiceUnavailable ->
-            "The service is currently unavailable. Please try again later."
-
-        is ErrorState.EmptyResponse ->
-            "We couldn't find any cat images at the moment. Please try again later."
-
-        is ErrorState.ApiError ->
-            "We encountered an error (${errorState.code}) when connecting to the server: ${errorState.message}"
-
-        is ErrorState.UnknownError ->
-            errorState.message.ifEmpty { "An unexpected error occurred. Please try again later." }
-    }
-}
-
-
-private fun shouldShowRetry(errorState: ErrorState): Boolean {
-    // Show retry for all errors except EmptyResponse and AccessDenied
-    return when (errorState) {
-        is ErrorState.EmptyResponse,
-        is ErrorState.AccessDenied -> false
-
-        else -> true
-    }
-}

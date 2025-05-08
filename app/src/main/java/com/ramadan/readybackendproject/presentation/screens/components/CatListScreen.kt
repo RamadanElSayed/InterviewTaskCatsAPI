@@ -78,10 +78,11 @@ fun CatListScreen(
                     LoadingView()
                 }
 
-                state.error != null && state.catImages.isEmpty() -> {
-                    state.error?.let { error ->
+                state.errorMessage != null && state.catImages.isEmpty() -> {
+                    state.errorMessage?.let {
                         ErrorView(
-                            errorState = error,
+                            errorMessage = state.errorMessage,
+                            errorCode = state.errorCode,
                             onRetry = {
                                 viewModel.processIntent(CatListIntent.RefreshCatImages)
                             }
