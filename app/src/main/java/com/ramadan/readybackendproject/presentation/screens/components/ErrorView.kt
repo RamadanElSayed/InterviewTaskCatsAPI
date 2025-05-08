@@ -22,10 +22,10 @@ import com.ramadan.readybackendproject.R
 
 @Composable
 fun ErrorView(
+    modifier: Modifier = Modifier,
     errorMessage: String? = null,
     errorCode: Int? = null,
     onRetry: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier

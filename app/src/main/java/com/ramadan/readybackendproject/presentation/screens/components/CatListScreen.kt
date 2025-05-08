@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramadan.readybackendproject.presentation.screens.uimodel.CatListIntent
 import com.ramadan.readybackendproject.presentation.screens.viewmodel.CatListViewModel
 
@@ -34,7 +35,7 @@ fun CatListScreen(
     modifier: Modifier = Modifier,
     viewModel: CatListViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(Unit) {
