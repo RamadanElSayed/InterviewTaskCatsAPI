@@ -1,4 +1,4 @@
-package com.ramadan.readybackendproject.presentation.mapper
+package com.ramadan.readybackendproject
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
