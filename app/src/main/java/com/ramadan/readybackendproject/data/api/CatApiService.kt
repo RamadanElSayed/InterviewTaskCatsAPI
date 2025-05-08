@@ -11,7 +11,6 @@ interface CatApiService {
     @GET("images/search")
     suspend fun getCatImages(@Query("limit") limit: Int = 10,
                              @Header("x-api-key") apiKey: String = "live_UgXaN2xswnXXwa1LNdWUNWdVRpZJC6tOUutYxmAxflOjzEropQhMqWFjIHtYKqg9",
-                             @Query("timestamp") timestamp: Long = System.currentTimeMillis()
 
     ): Response<List<CatImageDto>>
 

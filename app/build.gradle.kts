@@ -90,6 +90,7 @@ dependencies {
 
     // Dependency injection
     implementation(libs.hilt.android)
+    androidTestImplementation(libs.androidx.core.testing)
     ksp(libs.hilt.compiler)
 
     implementation(libs.androidx.hilt.navigation.compose)
@@ -114,15 +115,16 @@ dependencies {
     testImplementation(libs.turbine)
 
     // Instrumented testing
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
 
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.ui.test.junit4)
     // Debug implementations
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.material3)
+// For Kotlin DSL (build.gradle.kts)
+    testImplementation(libs.androidx.core.testing)
+
 
 
     implementation(libs.androidx.navigation.compose)

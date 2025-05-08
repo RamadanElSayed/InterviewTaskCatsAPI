@@ -33,20 +33,24 @@ class CatRepositoryImpl @Inject constructor(
                     emit(BaseResult.Success(domainModels))
                 }
             } else {
-                emit(BaseResult.Error(
-                    ApiError.ServerError(
-                        message = response.message() ?: "API error occurred",
-                        code = response.code()
+                emit(
+                    BaseResult.Error(
+                        ApiError.ServerError(
+                            message = response.message() ?: "API error occurred",
+                            code = response.code()
+                        )
                     )
-                ))
+                )
             }
         } catch (e: HttpException) {
-            emit(BaseResult.Error(
-                ApiError.ServerError(
-                    message = e.message(),
-                    code = e.code()
+            emit(
+                BaseResult.Error(
+                    ApiError.ServerError(
+                        message = e.message(),
+                        code = e.code()
+                    )
                 )
-            ))
+            )
         } catch (e: IOException) {
             emit(BaseResult.Error(ApiError.Network(e.message ?: "Network error occurred")))
         } catch (e: Exception) {
@@ -58,9 +62,7 @@ class CatRepositoryImpl @Inject constructor(
         emit(BaseResult.Loading)
 
         try {
-            // Add timestamp to force fresh data
-            val timestamp = System.currentTimeMillis()
-            val response = apiService.getCatImages(limit=limit, timestamp=timestamp)
+            val response = apiService.getCatImages(limit = limit)
 
             if (response.isSuccessful) {
                 val catImagesDto = response.body()
@@ -72,20 +74,24 @@ class CatRepositoryImpl @Inject constructor(
                     emit(BaseResult.Success(domainModels))
                 }
             } else {
-                emit(BaseResult.Error(
-                    ApiError.ServerError(
-                        message = response.message() ?: "API error occurred",
-                        code = response.code()
+                emit(
+                    BaseResult.Error(
+                        ApiError.ServerError(
+                            message = response.message() ?: "API error occurred",
+                            code = response.code()
+                        )
                     )
-                ))
+                )
             }
         } catch (e: HttpException) {
-            emit(BaseResult.Error(
-                ApiError.ServerError(
-                    message = e.message(),
-                    code = e.code()
+            emit(
+                BaseResult.Error(
+                    ApiError.ServerError(
+                        message = e.message(),
+                        code = e.code()
+                    )
                 )
-            ))
+            )
         } catch (e: IOException) {
             emit(BaseResult.Error(ApiError.Network(e.message ?: "Network error occurred")))
         } catch (e: Exception) {

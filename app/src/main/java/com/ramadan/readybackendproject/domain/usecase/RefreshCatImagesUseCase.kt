@@ -10,6 +10,9 @@ import javax.inject.Inject
 class RefreshCatImagesUseCase @Inject constructor(
     private val repository: CatRepository
 ) {
+    companion object {
+        const val DEFAULT_LIMIT = 10 // Expose constant for testing
+    }
     operator fun invoke(limit: Int = 10): Flow<BaseResult<List<CatImage>>> {
         return repository.getCatImages(limit)
     }
