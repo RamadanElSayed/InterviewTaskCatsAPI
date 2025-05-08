@@ -5,7 +5,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-// Using default system font - no custom font definitions required
 val Typography = Typography(
     // Display styles
     displayLarge = TextStyle(

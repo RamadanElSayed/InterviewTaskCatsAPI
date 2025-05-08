@@ -29,10 +29,6 @@ val OnSurfaceDark = Color(0xFFFFFFFF)
 val OnErrorDark = Color(0xFF000000)
 
 // Additional Colors for UI elements
-val CardBackground = Color(0xFFFFFFFF)
-val CardBackgroundDark = Color(0xFF2D2D2D)
 val Divider = Color(0xFFE0E0E0)
 val DividerDark = Color(0xFF424242)
 val Accent = Color(0xFFFF9800)
-val Success = Color(0xFF4CAF50)
-val Warning = Color(0xFFFFC107)
