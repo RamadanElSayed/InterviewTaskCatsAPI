@@ -56,7 +56,6 @@ android {
         }
     }
 
-    // Configure JUnit 5 testing
     tasks.withType<Test> {
         useJUnitPlatform()
     }
@@ -115,17 +114,12 @@ dependencies {
     testImplementation(libs.turbine)
 
     // Instrumented testing
-
     androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.ui.test.junit4)
-    // Debug implementations
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.material3)
-// For Kotlin DSL (build.gradle.kts)
     testImplementation(libs.androidx.core.testing)
-
-
 
     implementation(libs.androidx.navigation.compose)
 }
