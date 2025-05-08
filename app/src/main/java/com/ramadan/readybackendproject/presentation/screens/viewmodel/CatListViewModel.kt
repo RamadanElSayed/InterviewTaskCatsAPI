@@ -38,7 +38,6 @@ class CatListViewModel @Inject constructor(
 
     private fun loadCatImages() {
         viewModelScope.launch {
-            // Show loading state
             _state.update {
                 it.copy(
                     isLoading = true, errorMessage = null,
@@ -87,7 +86,6 @@ class CatListViewModel @Inject constructor(
 
     private fun refreshCatImages() {
         viewModelScope.launch {
-            // Show refreshing state
             _state.update {
                 it.copy(
                     isRefreshing = true, errorMessage = null,
