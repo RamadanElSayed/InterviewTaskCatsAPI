@@ -26,7 +26,6 @@ class CatListViewModel @Inject constructor(
     val state: StateFlow<CatListState> = _state
 
     init {
-        // Automatically load images when the ViewModel is created
         processIntent(CatListIntent.LoadCatImages)
     }
 

@@ -37,9 +37,9 @@ fun CatListScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(Unit) {
-        viewModel.processIntent(CatListIntent.LoadCatImages)
-    }
+//    LaunchedEffect(Unit) {
+//        viewModel.processIntent(CatListIntent.LoadCatImages)
+//    }
 
     LaunchedEffect(state.isRefreshing) {
         if (state.isRefreshing) {
