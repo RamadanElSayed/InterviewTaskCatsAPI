@@ -11,6 +11,8 @@ import com.ramadan.readybackendproject.presentation.screens.components.CatListSc
 import com.ramadan.readybackendproject.ui.theme.CatAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+//https://developers.thecatapi.com/view-account/ylX4blBYT9FaoVd6OhvR?report=bOoHBz-8t
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
